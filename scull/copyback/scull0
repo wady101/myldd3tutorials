@@ -250,6 +250,7 @@ int scull_open(struct inode *inode, struct file *filp)         /* Initialization
 		scull_trim(dev); /* ignore errors */
 		up(&dev->sem);
 	}
+  printk ("hellomydearfrenz");
 	return 0;          /* success */
 }
 
