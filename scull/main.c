@@ -638,12 +638,12 @@ int scull_init_module(void)
 	 * allocate the devices -- we can't have them static, as the number
 	 * can be specified at load time
 	 */
-	scull_devices = kmalloc(scull_nr_devs * sizeof(struct scull_dev), GFP_KERNEL);
+	scull_devices = kmalloc(scull_nr_devs * sizeof(struct scull_dev), GFP_KERNEL);     //Use GFP_KERNEL flag with malloc - as it is used for allocating space in the kernel memory
 	if (!scull_devices) {
 		result = -ENOMEM;
 		goto fail;  /* Make this more graceful */
 	}
-	memset(scull_devices, 0, scull_nr_devs * sizeof(struct scull_dev));
+	memset(scull_devices, 0, scull_nr_devs * sizeof(struct scull_dev));      //Fills 0s in scull_devices with size 3rd argmuent
 
         /* Initialize each device. */
 	for (i = 0; i < scull_nr_devs; i++) {
@@ -655,8 +655,11 @@ int scull_init_module(void)
 
         /* At this point call the init function for any friend device */
 	dev = MKDEV(scull_major, scull_minor + scull_nr_devs);
+  printk(KERN_ERR "count after the num of drivers %x",dev);
 	dev += scull_p_init(dev);
+  printk(KERN_WARNING "Count after adding num of pipes %x",dev);
 	dev += scull_access_init(dev);
+  printk(KERN_ERR "Count after adding num of devices  %x",dev);
 
 #ifdef SCULL_DEBUG /* only when debugging */
 	scull_create_proc();
