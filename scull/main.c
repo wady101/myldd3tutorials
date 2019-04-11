@@ -391,7 +391,7 @@ ssize_t scull_write(struct file *filp, const char __user *buf, size_t count,
  * The ioctl() implementation
  */
 
-long scull_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+long scull_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) //Handler that has to be called by another program for displaying results 
 {
 
 	int err = 0, tmp;

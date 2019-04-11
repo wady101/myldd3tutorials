@@ -54,17 +54,17 @@ static atomic_t scull_s_available = ATOMIC_INIT(1);
 
 static int scull_s_open(struct inode *inode, struct file *filp)
 {
-	struct scull_dev *dev = &scull_s_device; /* device information */
+	struct scull_dev *dev = &scull_s_device; /* device information == Initialize device*/
 
 	if (! atomic_dec_and_test (&scull_s_available)) {
 		atomic_inc(&scull_s_available);
-		return -EBUSY; /* already open */
+		return -EBUSY; /* already open */                   //Check for device is ready. 
 	}
 
 	/* then, everything else is copied from the bare scull device */
 	if ( (filp->f_flags & O_ACCMODE) == O_WRONLY)
 		scull_trim(dev);
-	filp->private_data = dev;
+	filp->private_data = dev;  //Copy from scull device and put into the file pointer -> data
 	return 0;          /* success */
 }
 
@@ -94,7 +94,12 @@ struct file_operations scull_sngl_fops = {
  * Next, the "uid" device. It can be opened multiple times by the
  * same user, but access is denied to other users if the device is open
  */
+/* A user ID (UID) is a unique positive integer assigned by a Unix-like operating system to each user.  UIDs are stored, along with their corresponding user names and other user-specific information, in the /etc/passwd file, which can be read with the cat command as follows:
 
+    cat /etc/passwd
+
+The third field contains the UID, and the fourth field contains the group ID (GID), which by default is equal to the UID for all ordinary users. 
+*/
 static struct scull_dev scull_u_device;
 static int scull_u_count;	/* initialized to 0 by default */
 static uid_t scull_u_owner;	/* initialized to 0 by default */
@@ -104,7 +109,7 @@ static int scull_u_open(struct inode *inode, struct file *filp)
 {
 	struct scull_dev *dev = &scull_u_device; /* device information */
 
-	spin_lock(&scull_u_lock);
+	spin_lock(&scull_u_lock); //Check if lock is avaliable - till then "spin" - useful if blocked for short periods, thus used in kernels
 	if (scull_u_count && 
 	                (scull_u_owner != current_uid().val) &&  /* allow user */
 	                (scull_u_owner != current_euid().val) && /* allow whoever did su */
@@ -117,7 +122,7 @@ static int scull_u_open(struct inode *inode, struct file *filp)
 		scull_u_owner = current_uid().val; /* grab it */
 
 	scull_u_count++;
-	spin_unlock(&scull_u_lock);
+	spin_unlock(&scull_u_lock); //Unlock
 
 /* then, everything else is copied from the bare scull device */
 
