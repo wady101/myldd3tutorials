@@ -1,6 +1,9 @@
 # Comment/uncomment the following line to disable/enable debugging
-#DEBUG = y
+DEBUG = y
 
+ifeq (.depend,$(wildcard .depend))
+include .depend
+endif
 
 # Add your debugging flag (or not) to CFLAGS
 ifeq ($(DEBUG),y)
@@ -13,6 +16,7 @@ LDDINC=$(PWD)/../include
 
 EXTRA_CFLAGS += $(DEBFLAGS)
 EXTRA_CFLAGS += -I$(LDDINC)
+EXTRA_CFLAGS += -I/lib/module/$(shell uname -r)/build/include/
 
 ifneq ($(KERNELRELEASE),)
 # call from kernel build system
@@ -23,7 +27,7 @@ obj-m	:= scull.o
 
 else
 
-KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+KERNELDIR ?= /lib/modules/$(shell uname -r)/build/
 PWD       := $(shell pwd)
 
 modules:
@@ -37,9 +41,6 @@ clean:
 	rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions
 
 depend .depend dep:
-	$(CC) $(EXTRA_CFLAGS) -M *.c > .depend
+	$(CC) $(EXTRA_CFLAGS) -M $(HOME)/kernel/myldd3tutorials/scull/*.c > .depend
 
 
-ifeq (.depend,$(wildcard .depend))
-include .depend
-endif
