@@ -84,7 +84,7 @@ struct scull_qset {
 	struct scull_qset *next;
 };
 
-struct scull_dev {
+struct scull_dev {                                                          //Since data is stored in the struct we have to use to store data 
 	struct scull_qset *data;  /* Pointer to first quantum set */
 	int quantum;              /* the current quantum size */
 	int qset;                 /* the current array size */

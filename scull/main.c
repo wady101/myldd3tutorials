@@ -236,12 +236,17 @@ static void scull_remove_proc(void)
  * Open and close
  */
 
+/* 
+ * In other words, you cannot pass around struct FILE structure between multiple applications for sharing a device. The only exception where it is possible to share is between parent & child processes. To access a device or device drivers simultaneously from multiple applications, each app. shall have to call open on the device & create a FILE struct of its own. It is up to the driver whether to allow simultaneous accesses or not. Kernel has no say here.
+
+private_data is exactly what it says. Data that's private to device driver. Application or library can use this field to communicate data that is very specific for the device driver.
+*/
 int scull_open(struct inode *inode, struct file *filp)         /* Initialization for preparation == Pg 72 */
 {
 	struct scull_dev *dev; /* device information */
 
-	dev = container_of(inode->i_cdev, struct scull_dev, cdev);
-	filp->private_data = dev; /* for other methods */
+	dev = container_of(inode->i_cdev, struct scull_dev, cdev);   // Used for getting the address of the containg structure - https://radek.io/2012/11/10/magical-container_of-macro/
+	filp->private_data = dev; /* for other methods */            //If storage is allocated to struct - then privatedata is used to get struct file passed for read/write to my structure. 
 
 	/* now trim to 0 the length of the device if open was write-only */
 	if ( (filp->f_flags & O_ACCMODE) == O_WRONLY) {
