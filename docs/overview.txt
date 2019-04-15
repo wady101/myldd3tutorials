@@ -1,0 +1,82 @@
+# cp /boot/config-xxx .config
+# make oldconfig
+# make menuconfig
+# make
+# make modules_install (root privilige)
+install modules in /lib/modules/
+
+# make install (root privilige)
+install linux in /boot
+
+# update-initramfs -c -k 2.6.16 (root privilige needed)
+generate initramfs for kernel 2.6.16
+
+# update-grub
+update grub menu list
+
+# reboot
+# uname -r
+2.6.16 (ok! 2.6.16 kernel environment gets ready!)
+
+Linux Device Drivers 3 Edition examples layout:
+---------------------------------------------------------------------------
+module       | about what?
+---------------------------------------------------------------------------
+misc-modules | complete.c: the writers awake readers 
+             | faulty.c: generate an oops when read
+             | hello.c: simple hello world module
+             | hellop.c: hello module with params
+             | jiq.c: work queue, tasklet, just-in-queue module
+             | jit.c: tasklet, timer, just-in-time module
+             | kdatasize.c: print the size of common data items from kspace
+             | seq.c: simple demonstration of seq_file interface
+             | silly.c: simple tool for unloading and printing ISA data
+             | sleepy.c: the writers awake the readers
+---------------------------------------------------------------------------
+misc-progs   | asynctest.c: use async notification to read stdin
+             | dataalign.c: show alignment needs
+             | datasize.c: print the size of common data items
+             | inp.c: read all the ports specified in hex on the cmd-line
+             | load50.c: simple busy-looping tool which forks 50 threads
+             | mapcmp.c: simple program to compare two mmap'd areas
+             | nbtest.c: read and write in non-blocking mode
+             | netifdebug.c: change the IFF_DEBUG flag of an interface
+             | outp.c: write all the ports specified in hex on the cmd-line
+             | polltest.c: test out reading with poll
+             | setconsole.c: choose a console to receive kernel messages
+             | setlevel.c: choose a console_loglevel for the kernel
+---------------------------------------------------------------------------
+pci          | simple pci device driver
+---------------------------------------------------------------------------
+sbull        | simple block utility for loading localities (disk)
+---------------------------------------------------------------------------
+scull        | the bare scull char module
+             | access.c: different access mode[ugo]
+             | modules: scull0,1,2,3; scullpipe0,1,2,3; scullpriv, sculluid
+             |          scullsingle, scullwuid
+---------------------------------------------------------------------------
+scullc       | a scull based on the slab caches         
+---------------------------------------------------------------------------
+sculld       | the bare sculld char module
+---------------------------------------------------------------------------
+scullp       | a scull using whole pages
+---------------------------------------------------------------------------
+scullv       | a scull using virtual addresses
+---------------------------------------------------------------------------
+short        | simple hardware operations and raw tests
+             | also a brief example of interrupt handling ("short int")
+---------------------------------------------------------------------------
+shortprint   | a version of the "short" driver which drives a parallel
+             | printer directly, with a lot of simplifying assumptions
+---------------------------------------------------------------------------
+simple       | REALLY simple memory mapping demonstration
+---------------------------------------------------------------------------
+skull        | simple typeless module
+---------------------------------------------------------------------------
+snull        | simple network utility
+---------------------------------------------------------------------------
+tty          | tiny_serial.c: tiny serial driver
+             | tiny_tty.c: tiny TTY driver
+---------------------------------------------------------------------------
+usb          | usb skeleton driver - 2.0
+---------------------------------------------------------------------------
