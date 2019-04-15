@@ -1,0 +1,22 @@
+Ripped from https://github.com/gilarus/ldd3/blob/master/docs/scull.txt
+scull (Simple Character Utility for Loading Localities)
+
+                      Working flow
+
+1. get device number(s) by register_chrdev_region or alloc_chrdev_region
+2. allocate memory for scull devices by kmalloc(..GFP_KERNEL)
+3. initialize each device /dev/scull0~3
+   3.1 init_MUTEX(&semaphore)
+   3.2 cdev_init, cdev_add
+4. init pipe devices (scullpipe0~3) /dev/scullpipe0~3
+5. create_proc_read_entry("scullpipe"..) /proc/scullpipe
+6. init single devices
+ /dev/scullsingle
+ /dev/sculluid
+ /dev/scullwuid
+ /dev/scullpriv
+7. #if SCULL_DEBUG
+create_proc_read_entry("scullmem")
+  /proc/scullmem
+create_proc_read_entry("scullseq")
+/proc/scullseq
