@@ -93,7 +93,7 @@ int scull_read_procmem(struct seq_file *s, void *v)
         for (i = 0; i < scull_nr_devs && s->count <= limit; i++) {
                 struct scull_dev *d = &scull_devices[i];
                 struct scull_qset *qs = d->data;
-                if (down_interruptible(&d->sem))
+                if (down_interruptible(&d->sem))    
                         return -ERESTARTSYS;
                 seq_printf(s,"\nDevice %i: qset %i, q %i, sz %li\n",
                              i, d->qset, d->quantum, d->size);
@@ -250,7 +250,7 @@ int scull_open(struct inode *inode, struct file *filp)         /* Initialization
 
 	/* now trim to 0 the length of the device if open was write-only */
 	if ( (filp->f_flags & O_ACCMODE) == O_WRONLY) {
-		if (down_interruptible(&dev->sem))
+		if (down_interruptible(&dev->sem))                         // Used to check for interrupts for the thread. 
 			return -ERESTARTSYS;
 		scull_trim(dev); /* ignore errors */
 		up(&dev->sem);
